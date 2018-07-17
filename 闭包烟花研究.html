@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{margin:0;padding:0;}
+			#div1{width:900px;height:500px;background:#DDDDDD;margin:0 auto;position:relative;}
+			.div2{width:5px;height:10px;background:red;position:absolute;}
+			.zha{width:10px;height:10px;border-radius:50%;background:deeppink;position:absolute;}
+		</style>
+	</head>
+	<body>
+		<div id="div1"></div>
+	</body>
+</html>
+<script src="startMove.js"></script>
+<script>
+	function Fn(){};
+	Fn.prototype.init=function(){
+		this.div1=document.getElementById("div1");
+		this.even();
+	}
+	Fn.prototype.even=function(){
+		this.div1.onclick=function(eve){
+			var div2=document.createElement("div");
+			div2.className="div2";
+			div2.style.left=eve.offsetX+"px";	
+			div1.appendChild(div2);
+			div2.style.top=div1.offsetHeight-div2.offsetHeight+"px";
+			this.posx=eve.offsetX;
+			this.posy=eve.offsetY;
+			console.log(div2.offsetHeight);
+			this.sheng(div2);
+		}.bind(this)
+	}
+	Fn.prototype.sheng=function(a){
+		startMove(a,{
+			"top":this.posy
+		},function(){
+			this.posx=a.offsetLeft;
+			this.posy=a.offsetTop;
+			a.remove();
+			console.log(this);
+			this.boom();
+		}.bind(this))
+	}
+	Fn.prototype.boom=function(){
+		var num=parseInt(Math.random()*10)+10;
+		var num2=10;
+//		for(let i=0;i<num;i++){
+//			let zha=document.createElement("div");
+//			div1.appendChild(zha);
+//			zha.className="zha";
+//			zha.style.left=this.posx+"px";
+//			zha.style.top=this.posy+"px";
+//			var r=100;                                                //使用的let解决bug
+//			var zhax=parseInt(Math.cos(Math.PI/(num/2)*i)*r+this.posx);
+//			var zhay=parseInt(Math.sin(Math.PI/(num/2)*i)*r+this.posy);
+//			console.log(zhax,zhay);
+//			startMove(zha,{
+//				"left":zhax,
+//				"top":zhay
+//			},function(){
+//				zha.remove()
+//			})
+//		}
+		
+		for(var i=0;i<num;i++){
+			(function(c){
+				var zha=document.createElement("div");
+				div1.appendChild(zha);
+				zha.className="zha";
+				zha.style.left=this.posx+"px";
+				zha.style.top=this.posy+"px";
+				var r=100;                                                //使用的闭包解决bug
+				var zhax=parseInt(Math.cos(Math.PI/(num/2)*c)*r+this.posx);
+				var zhay=parseInt(Math.sin(Math.PI/(num/2)*c)*r+this.posy);
+				console.log(c,zhax,zhay,this.posx);
+				console.log(this);
+				startMove(zha,{
+					"left":zhax,
+					"top":zhay
+				},function(){
+					zha.remove()
+				})
+			}).bind(this)(i)
+		}
+	}
+	var fn=new Fn();
+	fn.init();
+</script>
+

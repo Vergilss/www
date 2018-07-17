@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{margin:0;padding:0;}
+			div{position:absolute;width:400px;height:210px;}
+			img{width:400px;height:210px;}
+			/*img{width:400px;height:210px;}*/
+			#img1{z-index:10;}
+		</style>
+	</head>
+	<body>
+		<div id="div1"><img src="img/天香.jpg" alt="" id="img1" /></div>
+		<div id="div2"><img src="img/五毒.jpg" alt="" id="img2" /></div>
+		<div id="div3"><img src="img/唐门.jpg" alt="" id="img3" /></div>
+		<div id="div4"><img src="img/丐帮.jpg" alt="" id="img4" /></div>
+		<div id="div5"><img src="img/太白.jpg" alt="" id="img5" /></div>
+		<div id="div6"><img src="img/真武.jpg" alt="" id="img6" /></div>
+		<div id="div7"><img src="img/神刀.jpg" alt="" id="img7" /></div>
+		<div id="div8"><img src="img/神威.jpg" alt="" id="img8" /></div>
+	</body>
+</html>
+<script>
+	var g=1;
+	var divss=document.getElementsByTagName("div");
+	for(var i=0;i<divss.length;i++){
+		divss[i].index=i;
+	}
+	function pic(a){
+		console.log(a);
+		a.onmousedown=function(eve){
+			this.style.zIndex=g;
+			g++;
+			var that=this;
+			console.log(a);
+			console.log("元素"+a.index,document.cookie);
+			eve=eve||window.eve;
+			var x=eve.offsetX;
+			var y=eve.offsetY;
+			document.onmousemove=function(eve){
+				eve=eve||window.eve;
+				a.style.left=eve.clientX-x+"px";
+				a.style.top=eve.clientY-y+"px";
+			}
+			document.onmouseup=function(eve){
+				var d=new Date();
+				d.setDate(d.getDate()+10);
+				document.cookie="div"+a.index+"x="+a.offsetLeft+";expires="+d;
+				document.cookie="div"+a.index+"y="+a.offsetTop+";expires="+d;
+				document.onmousemove=null;
+			}	
+		}
+		//设置图片无法被拖拽
+		var imgs=document.getElementsByTagName("img");
+		for(var i=0;i<imgs.length;i++){
+			imgs[i].ondragstart=function(){
+				return false;
+			}
+		}
+		window.onload=function(){
+			console.log("元素"+a.index,"装载");
+//				a.style.left=getcookie("div"+a.index+"x")+"px";
+//				a.style.top=getcookie("div"+a.index+"y")+"px";
+			for(var i=0;i<divss.length;i++){
+				divss[i].style.left=getcookie("div"+i+"x")+"px";
+				divss[i].style.top=getcookie("div"+i+"y")+"px";
+			}
+		}
+		
+		function getcookie(xxx){
+			var s=document.cookie.split("; ");
+//			console.log(s);
+			for(var i=0;i<s.length;i++){
+				var ss=s[i].split("=");
+//				console.log(ss);
+				if(ss[0]==xxx){
+					return ss[1]; 
+				}
+			}
+		}
+//		console.log(getcookie("div1x"));
+	}
+	for(var i=0;i<divss.length;i++){
+		pic(divss[i]);
+	}
+//	function getcookie(xxx){
+//		var s=document.cookie.split("; ");
+//		console.log(document.cookie.split("; "));
+//		for(var i=0;i<s.length;i++){
+//			s[i].split("=");
+//			if(s[i].split("=")[0]==xxx){
+//				return s[i].split("=")[1]; 
+//			}
+//		}
+//	}
+//	console.log(getcookie("div1x"));
+
+</script>
+
+
+

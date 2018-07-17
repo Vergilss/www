@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{margin:0;padding:0;}
+			.sss{width:20px;height:20px;background:blue;position:absolute;line-height:20px;
+			text-align:center;font-size:6px;top:0px;left:0px;}
+			span{display:block;width:20px;height:20px;position:absolute;background:green;
+			border-radius:50%;}
+			html,body{height:100%;}
+			#score{widows: 150px;height:20px;line-height:20px;font-size:20px;position:fixed;top:20px;
+			left:20px;}
+			#btn1{position:absolute;left:650px;top:200px;}
+		</style>
+	</head>
+	<body>
+		<!--<button id="btn1">开始游戏</button>-->
+		<div class="sss"></div>
+		<div class="sss"></div>
+		<div class="sss"></div>
+		<div class="sss"></div>
+		<div class="sss"></div>
+		<div class="sss"></div>
+		<div class="sss">蛇</div>
+		<div id="score">计分板：0</div>
+	</body>
+</html>
+<script>
+//	document.body.style.background="yellow";
+	var divs=document.getElementsByClassName("sss");
+	divs[divs.length-1].style.background="red";
+	//蛇的初始位置
+	for(var l=0;l<divs.length;l++){
+		divs[l].style.left=divs[l].offsetWidth*l+"px";
+	}
+	var fen=0;
+	var timer;
+	food();
+	var sss;
+	var span;
+	var arr=[];
+	document.onkeydown=function(eve){
+		eve=eve||window.eve;
+		keycode=eve.keyCode||eve.which;
+		window.clearInterval(timer);
+		function move(){	
+			var sw=parseInt(divs[divs.length-1].offsetWidth);
+			var sh=parseInt(divs[divs.length-1].offsetHeight);
+			var fw=parseInt(span.offsetWidth);
+			var fh=parseInt(span.offsetHeight);
+			var sx=parseInt(getComputedStyle(divs[divs.length-1]).left);
+			var sy=parseInt(getComputedStyle(divs[divs.length-1]).top);
+			var fx=parseInt(getComputedStyle(span).left);
+			var fy=parseInt(getComputedStyle(span).top);
+			//吞食物判定
+			if(sx>(fx-sw)&&sx<(fx+fw)&&sy>(fy-sh)&&sy<(fy+fh)  ){
+				span.style.display="none";
+				console.log(typeof(score.innerText));
+				fen++;
+				score.innerText=("计分板："+fen);
+				food();
+				//蛇的身体长长一格
+				var divn=document.createElement("div");
+//				divn.style.background="yellow";
+				divn.className="sss";
+				document.body.insertBefore(divn,document.body.firstChild);
+			}
+			//蛇的运动速度与方向
+			for(var i=0;i<divs.length-1;i++){
+				divs[i].style.left=getComputedStyle(divs[i+1]).left;
+				divs[i].style.top=getComputedStyle(divs[i+1]).top;
+			}	
+			switch(keycode){
+				case 65:
+				console.log("左");
+				divs[divs.length-1].style.left=sx-20+"px";
+				console.log("左2");
+				break;
+				case 87:
+				divs[divs.length-1].style.top=sy-20+"px";
+				console.log("上");
+				break;
+				case 68:
+				console.log("右");
+				divs[divs.length-1].style.left=sx+20+"px";
+				console.log("右2");
+				break;
+				case 83:
+				console.log("下");
+				divs[divs.length-1].style.top=sy+20+"px";
+				console.log("下2");
+				break;
+			}
+			//边界界定
+			for(var ii=0;ii<divs.length;ii++){
+				if(parseInt(getComputedStyle(divs[ii]).left)>=document.body.clientWidth){
+					divs[ii].style.left=0+"px";
+				}
+				if(parseInt(getComputedStyle(divs[ii]).left)<0){
+					divs[ii].style.left=document.body.clientWidth+"px";
+				}
+				if(parseInt(getComputedStyle(divs[ii]).top)>=document.documentElement.clientHeight){
+					divs[ii].style.top=0+"px";
+				}
+				if(parseInt(getComputedStyle(divs[ii]).top)<0){
+					divs[ii].style.top=document.documentElement.clientHeight+"px";
+				}
+			}
+//			for(var j=0;j<divs.length;j++){
+//				var obj={};
+//				obj.a=divs[j].offsetLeft;
+//				obj.b=divs[j].offsetTop;
+//				arr.push(obj);
+//			}
+//			console.log(arr);
+
+			//蛇碰到自己的判定
+			for(var k=0;k<divs.length-2;k++){
+				if(sx>(divs[k].offsetLeft-sw)&&sx<(divs[k].offsetLeft+divs[k].offsetWidth)&&sy>(divs[k].offsetTop-sh)&&sy<(divs[k].offsetTop+divs[k].offsetHeight)){                
+					console.log("碰到自己了");
+					gameover();
+					clearInterval(timer);
+					var p=document.createElement("p");
+					p.style.cssText="display:block;position:fixed;height:100px;width:500px;"+
+					"font-size:80px;line-height:100px;color:red;left:0;right:0;top:0;bottom:0;"+
+					"margin:auto;text-align:center;";
+					p.innerText="游戏结束";
+					document.body.appendChild(p);
+				}
+			}
+			arr=[];
+		}
+		timer=setInterval(move,100);
+	}
+	//食物的创建
+	function food(){
+		var x=parseInt(Math.random()*(document.body.clientWidth-100));
+		var y=parseInt(Math.random()*(document.documentElement.clientHeight-100));
+		span=document.createElement("span");
+		span.style.left=x+"px";
+		span.style.top=y+"px";
+		document.body.appendChild(span);
+	}
+	function gameover(){
+		document.body.style.background="gray";
+	}
+	
+</script>

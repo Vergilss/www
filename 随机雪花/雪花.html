@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#bg{
+				background: url(image/bg.jpg)  no-repeat;
+				background-size: cover;
+				width: 100%;
+				height: 100%;
+				position: fixed;
+			}
+			img {
+				width: 18px;
+				height: 18px;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="bg"></div>
+	</body>
+</html>
+<script src="jquery-1.11.3.js"></script>
+<script>
+	
+function snow(){
+	this.s=$("<img src='image/snow.gif'>")
+}
+snow.prototype={
+	jia:function(){
+		$("body").append(this.s);
+		return this;
+	},
+	move:function(){
+		var that=this;
+	 	this.s.animate({"left":Math.random()*$(window).width()-18,"top":Math.random()*$(window).height()-18}
+	 	,Math.random()*2000+1000,function(){that.move();});
+	}
+}
+new snow().jia().move();
+new snow().jia().move();
+new snow().jia().move();
+new snow().jia().move();
+new snow().jia().move();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+
